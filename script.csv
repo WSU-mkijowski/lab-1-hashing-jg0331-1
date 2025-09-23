@@ -1,0 +1,29 @@
+#!/bin/bash
+
+input_file="quiz_data.csv"
+output_file="salted-data.csv"
+
+# Check if input file exists
+if [[ ! -f "$input_file" ]]; then
+    echo "Error: File $input_file not found!"
+    exit 1
+fi
+
+# Generate salted hashes and replace usernames
+awk -F ',' '{
+    username=$1;
+    if (!(username in salt_map)) {
+        salt_map[username]=sprintf("%05d", int(rand()*100000));  # Generate 5-digit salt
+    }
+    salt=salt_map[username];
+    hash=sprintf("%s%s", salt, username);
+    cmd="printf \"" hash "\" | sha256sum | awk \047{print $1}\047";
+    cmd | getline hash;
+    close(cmd);
+    salted_hash=salt hash;
+    sub($1, salted_hash);
+    print $0;
+}' OFS=',' "$input_file" > "$output_file"
+
+echo "Salted hashes saved in $output_file"
+

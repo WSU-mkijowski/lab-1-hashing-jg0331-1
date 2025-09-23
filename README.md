@@ -1,7 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/SPs4PNWX)
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/SLc4hyUA)
 # Lab 1 : CEG 3400 Intro to Cyber Security
 
-## Name:
+## Name: Josh Gray
 
 ### Task 1: Hashing
 
@@ -9,19 +9,25 @@
 
 Answer the following in this file:
 
-* How many unique users are in the data?
-* How many salts did you create?
+* How many unique users are in the data? - 49
+* How many salts did you create? - 49
 * How many possible combinations will I need to try to figure out the secret ID
   of all students (assume I know all potential secret IDs and have your 
-  `salted-data.csv`)
+  `salted-data.csv`) - 4.9 million 
 * Instead of salts, if you were to use a nonce (unique number for each hashed
-  field) how many possible combinations would I need to try?
+  field) how many possible combinations would I need to try? - 100,000 x M
+
+ This is much harder than using a salt per user because:
+
+Instead of 49 salts, there are as many unique nonces as there are secret identifiers.
+The number of combinations scales with the dataset size instead of just the number of users.
+
 * Given the above, if this quiz data were *actual* class data, say for example
-  your final exam, how would you store this dataset?  Why?
+  your final exam, how would you store this dataset?  Why? - Use HMAC-SHA256 with a secret key, Argon2, AES-256 encryption, and delete unnecessary data. - Can't brute force the hashes.
 
 ```bash
-please put any cool bash one-liners or other piped commands you
-learned/struggled with for task 1 here
+cut -d',' -f1 salted-data.csv | sort | uniq | wc -l
+
 ```
 
 ---
@@ -33,8 +39,8 @@ learned/struggled with for task 1 here
 
 Answer the following:
 
-* Paste your ***nonce+word(s) and hash(s)*** below ( either 3x `000` hashes or 1x `0000`
-hash)
+* Found: 22578wonderful - 0008b337ba22337f194c838895eafc8bde36fbc8c7b17259095e98cd13af2e8b
+* 
 
 ```
 

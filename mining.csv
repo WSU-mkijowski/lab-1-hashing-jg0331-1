@@ -1,0 +1,26 @@
+#!/bin/bash
+
+dictionary="data/dictionary"
+output_file="coins.txt"
+
+# Check if dictionary file exists
+if [[ ! -f "$dictionary" ]]; then
+    echo "Error: Dictionary file not found!"
+    exit 1
+fi
+
+# Mining loop
+found=0
+while [[ $found -lt 3 ]]; do
+    nonce=$(( RANDOM % 999999999 + 10 ))
+    word=$(shuf -n 1 "$dictionary") 
+    hash=$(printf "%s%s" "$nonce" "$word" | sha256sum | awk '{print $1}')
+
+    if [[ $hash == 00000* ]]; then
+        echo "$nonce$word" >> "$output_file"
+        ((found++))
+        echo "Found: $nonce$word - $hash"
+    fi
+done
+
+echo "Mining complete! Results saved in $output_file"
